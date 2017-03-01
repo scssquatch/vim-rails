@@ -3331,13 +3331,13 @@ function! s:readable_alternate_candidates(...) dict abort
   elseif f =~# '\<application\.js$'
     return ['app/helpers/application_helper.rb']
   elseif f =~# 'spec\.js$'
-    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '_spec.js', '.js')]
+    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '.spec.js', '.js')]
   elseif f =~# 'Spec\.js$'
     return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), 'Spec.js', '.js')]
   elseif f =~# 'spec\.coffee$'
-    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '_spec.coffee', '.coffee')]
+    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '.spec.coffee', '.coffee')]
   elseif f =~# 'spec\.js\.coffee$'
-    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '_spec.js.coffee', '.js.coffee')]
+    return [s:sub(s:sub(f, 'spec/javascripts', 'app/assets/javascripts'), '.spec.js.coffee', '.js.coffee')]
   elseif self.type_name('javascript')
     if f =~ 'public/javascripts'
       let to_replace = 'public/javascripts'
@@ -3346,16 +3346,19 @@ function! s:readable_alternate_candidates(...) dict abort
     endif
     if f =~ '.coffee.js$'
       let suffix = '.coffee.js'
-      let suffix_replacement = '_spec.coffee.js'
+      let suffix_replacement = '.spec.coffee.js'
+    elseif f =~ '.js.coffee$'
+      let suffix = '.coffee'
+      let suffix_replacement = '.spec.js.coffee'
     elseif f =~ '.coffee$'
       let suffix = '.coffee'
-      let suffix_replacement = '_spec.coffee'
+      let suffix_replacement = '.spec.coffee'
     elseif f =~ '[A-Z][a-z]\+\.js$'
       let suffix = '.js'
       let suffix_replacement = 'Spec.js'
     else
       let suffix = '.js'
-      let suffix_replacement = '_spec.js'
+      let suffix_replacement = '.spec.js'
     endif
     return [s:sub(s:sub(f, to_replace, 'spec/javascripts'), suffix, suffix_replacement)]
   elseif self.type_name('db-schema') || f =~# '^db/\w*structure.sql$'
